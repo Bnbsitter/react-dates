@@ -24,6 +24,7 @@ const propTypes = {
   enableOutsideDays: PropTypes.bool,
   numberOfMonths: PropTypes.number,
   modifiers: PropTypes.object,
+  modifiersComponents: PropTypes.object,
   orientation: OrientationShape,
   withPortal: PropTypes.bool,
   hidden: PropTypes.bool,
@@ -46,12 +47,14 @@ const propTypes = {
 
   // i18n
   monthFormat: PropTypes.string,
+  weekFormat: PropTypes.string,
 };
 
 const defaultProps = {
   enableOutsideDays: false,
   numberOfMonths: 1,
   modifiers: {},
+  modifiersComponents: {},
   orientation: HORIZONTAL_ORIENTATION,
   withPortal: false,
   hidden: false,
@@ -75,6 +78,7 @@ const defaultProps = {
 
   // i18n
   monthFormat: 'MMMM YYYY',
+  weekFormat: 'dd',
 };
 
 export default class DayPicker extends React.Component {
@@ -92,7 +96,6 @@ export default class DayPicker extends React.Component {
     this.onNextMonthClick = this.onNextMonthClick.bind(this);
     this.updateStateAfterMonthTransition = this.updateStateAfterMonthTransition.bind(this);
   }
-
   componentDidMount() {
     if (this.isHorizontal()) {
       this.adjustDayPickerHeight();
@@ -316,7 +319,7 @@ export default class DayPicker extends React.Component {
     );
   }
 
-  renderWeekHeader(index) {
+  renderWeekHeader(index, weekFormat) {
     const horizontalStyle = {
       left: index * CALENDAR_MONTH_WIDTH,
     };
@@ -327,7 +330,7 @@ export default class DayPicker extends React.Component {
     for (let i = 0; i < 7; i++) {
       header.push(
         <li key={i}>
-          <small>{moment().weekday(i).format('dd')}</small>
+          <small>{moment().weekday(i).format(weekFormat)}</small>
         </li>
       );
     }
@@ -352,6 +355,7 @@ export default class DayPicker extends React.Component {
       numberOfMonths,
       orientation,
       modifiers,
+      modifiersComponents,
       withPortal,
       onDayClick,
       onDayMouseDown,
@@ -363,12 +367,13 @@ export default class DayPicker extends React.Component {
       onDayMouseLeave,
       onOutsideClick,
       monthFormat,
+      weekFormat,
     } = this.props;
 
     const numOfWeekHeaders = this.isVertical() ? 1 : numberOfMonths;
     const weekHeaders = [];
     for (let i = 0; i < numOfWeekHeaders; i++) {
-      weekHeaders.push(this.renderWeekHeader(i));
+      weekHeaders.push(this.renderWeekHeader(i, weekFormat));
     }
 
     let firstVisibleMonthIndex = 1;
@@ -411,7 +416,7 @@ export default class DayPicker extends React.Component {
     const isCalendarMonthGridAnimating = monthTransition !== null;
     const transformType = this.isVertical() ? 'translateY' : 'translateX';
     const transformValue = `${transformType}(${translationValue}px)`;
-
+    
     return (
       <div className={dayPickerClassNames} style={dayPickerStyle} >
         <OutsideClickHandler onOutsideClick={onOutsideClick}>
@@ -434,6 +439,7 @@ export default class DayPicker extends React.Component {
               initialMonth={currentMonth}
               isAnimating={isCalendarMonthGridAnimating}
               modifiers={modifiers}
+              modifiersComponents={modifiersComponents}
               orientation={orientation}
               withPortal={withPortal}
               numberOfMonths={numberOfMonths}

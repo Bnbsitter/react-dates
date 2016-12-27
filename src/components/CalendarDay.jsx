@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import shallowCompare from 'react-addons-shallow-compare';
 import momentPropTypes from 'react-moment-proptypes';
 import moment from 'moment';
@@ -16,6 +17,7 @@ const propTypes = {
   onDayTouchStart: PropTypes.func,
   onDayTouchEnd: PropTypes.func,
   onDayTouchTap: PropTypes.func,
+  children: PropTypes.node,
 };
 
 const defaultProps = {
@@ -84,7 +86,11 @@ export default class CalendarDay extends React.Component {
   }
 
   render() {
-    const { day, modifiers } = this.props;
+    const {
+      day,
+      modifiers,
+      children,
+    } = this.props;
 
     return (
       <div
@@ -98,6 +104,7 @@ export default class CalendarDay extends React.Component {
         onTouchEnd={(e) => this.handleDayTouchEnd(day, modifiers, e)}
       >
         <span className="CalendarDay__day">{day.format('D')}</span>
+        {children}
       </div>
     );
   }

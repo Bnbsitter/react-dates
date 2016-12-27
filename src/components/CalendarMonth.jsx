@@ -16,6 +16,7 @@ const propTypes = {
   isVisible: PropTypes.bool,
   enableOutsideDays: PropTypes.bool,
   modifiers: PropTypes.object,
+  modifiersComponents: PropTypes.object,
   orientation: OrientationShape,
   onDayClick: PropTypes.func,
   onDayMouseDown: PropTypes.func,
@@ -35,6 +36,7 @@ const defaultProps = {
   isVisible: true,
   enableOutsideDays: false,
   modifiers: {},
+  modifiersComponents: {},
   orientation: HORIZONTAL_ORIENTATION,
   onDayClick() {},
   onDayMouseDown() {},
@@ -53,6 +55,10 @@ export function getModifiersForDay(modifiers, day) {
   return day ? Object.keys(modifiers).filter(key => modifiers[key](day)) : [];
 }
 
+function getModifierComponentForDay(modifiersComponents, day) {
+  return day ? modifiersComponents[day.format('YYYY-MM-DD')] : null;
+}
+
 export default function CalendarMonth(props) {
   const {
     month,
@@ -60,6 +66,7 @@ export default function CalendarMonth(props) {
     orientation,
     isVisible,
     modifiers,
+    modifiersComponents,
     enableOutsideDays,
     onDayClick,
     onDayMouseDown,
@@ -99,6 +106,7 @@ export default function CalendarMonth(props) {
                       <CalendarDay
                         day={day}
                         modifiers={modifiersForDay}
+                        modifiersComponents={modifiersComponents}
                         onDayMouseEnter={onDayMouseEnter}
                         onDayMouseLeave={onDayMouseLeave}
                         onDayMouseDown={onDayMouseDown}
@@ -107,7 +115,9 @@ export default function CalendarMonth(props) {
                         onDayTouchStart={onDayTouchStart}
                         onDayTouchEnd={onDayTouchEnd}
                         onDayTouchTap={onDayTouchTap}
-                      />
+                      >
+                        {getModifierComponentForDay(modifiersComponents, day)}
+                      </CalendarDay>
                     }
                   </td>
                 );
