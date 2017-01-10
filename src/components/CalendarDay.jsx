@@ -43,8 +43,8 @@ export default class CalendarDay extends React.Component {
     return shallowCompare(this, nextProps, nextState);
   }
 
-  handleDayClick(day, modifiers, e) {
-    this.props.onDayClick(day, modifiers, e);
+  handleDayClick(day, modifiers, e, element) {
+    this.props.onDayClick(day, e, element);
   }
 
   handleDayMouseDown(day, modifiers, e) {
@@ -94,12 +94,13 @@ export default class CalendarDay extends React.Component {
 
     return (
       <div
+        ref={`day-${day.format('X')}`}
         className="CalendarDay"
         onMouseEnter={(e) => this.handleDayMouseEnter(day, modifiers, e)}
         onMouseLeave={(e) => this.handleDayMouseLeave(day, modifiers, e)}
         onMouseDown={(e) => this.handleDayMouseDown(day, modifiers, e)}
         onMouseUp={(e) => this.handleDayMouseUp(day, modifiers, e)}
-        onClick={(e) => this.handleDayClick(day, modifiers, e)}
+        onClick={(e) => this.handleDayClick(day, modifiers, e, this.refs[`day-${day.format('X')}`].offsetParent)}
         onTouchStart={(e) => this.handleDayTouchStart(day, modifiers, e)}
         onTouchEnd={(e) => this.handleDayTouchEnd(day, modifiers, e)}
       >

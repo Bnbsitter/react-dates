@@ -101,7 +101,10 @@ export default function CalendarMonth(props) {
                 }, modifiersForDay.map(mod => `CalendarMonth__day--${mod}`));
 
                 return (
-                  <td className={className} key={j}>
+                  <td
+                    className={className}
+                    key={j}
+                  >
                     {day &&
                       <CalendarDay
                         day={day}

@@ -26,6 +26,7 @@ const propTypes = {
   modifiers: PropTypes.object,
   modifiersComponents: PropTypes.object,
   orientation: OrientationShape,
+  children: PropTypes.element,
   withPortal: PropTypes.bool,
   hidden: PropTypes.bool,
   initialVisibleMonth: PropTypes.func,
@@ -61,6 +62,7 @@ const defaultProps = {
 
   initialVisibleMonth: () => moment(),
 
+  children: null,
   navPrev: null,
   navNext: null,
 
@@ -368,6 +370,7 @@ export default class DayPicker extends React.Component {
       onOutsideClick,
       monthFormat,
       weekFormat,
+      children,
     } = this.props;
 
     const numOfWeekHeaders = this.isVertical() ? 1 : numberOfMonths;
@@ -455,6 +458,7 @@ export default class DayPicker extends React.Component {
               monthFormat={monthFormat}
             />
           </div>
+          {children}
         </OutsideClickHandler>
       </div>
     );
